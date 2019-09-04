@@ -15,7 +15,7 @@ class Register extends React.Component{
         })
     }
     
-    handleSubmit = async (e) => {
+    handleSubmit = (e) => {
         e.preventDefault()
         const registerCall = this.props.register(this.state);
         registerCall.then((data) => {this.props.history.push('/profile')})
