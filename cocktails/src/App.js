@@ -23,6 +23,20 @@ class App extends React.Component {
     id: ''
   }
 
+  componentDidMount = () =>{
+    const user = JSON.parse(localStorage.getItem("user"))
+    console.log(user, '<-- cdm user')
+
+    this.setState({
+      if(user){
+        this.setState({
+          ...user,
+          loading:false
+        })
+      }
+    })
+  }
+
   login = async (loginInfo) =>{
     try {
       const loginResponse = await fetch (`http://localhost:3000/auth/login`, {
@@ -84,13 +98,14 @@ class App extends React.Component {
 
 
   render(){
+    const user = JSON.parse(localStorage.getItem("user"))
     return (
       <div className="App">
         <main>
           <Switch>
             <Route exact path="/" render={(props) => <Login {...props} logIn={this.login}/>}/>
             <Route exact path="/register" render={(props) => <Register {...props} register={this.register} /> } />
-            <Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state}/>}/>
+            <Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state}/>} userInfo={user}/>
             <Route component={My404}/>
           </Switch>
         </main>
