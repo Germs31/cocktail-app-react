@@ -4,6 +4,7 @@ import './App.css';
 import Register from './Register'
 import Profile from './Profile'
 import Login from './Login'
+import EditUser from './EditUser'
 import { Route, Switch, withRouter } from 'react-router-dom'
 
 const My404 = () =>{
@@ -20,21 +21,9 @@ class App extends React.Component {
     username: '',
     email: '',
     loading: true,
-    id: ''
-  }
-
-  componentDidMount = () =>{
-    const user = JSON.parse(localStorage.getItem("user"))
-    console.log(user, '<-- cdm user')
-
-    this.setState({
-      if(user){
-        this.setState({
-          ...user,
-          loading:false
-        })
-      }
-    })
+    password:'',
+    isLogged: false,
+    _id: ''
   }
 
   login = async (loginInfo) =>{
@@ -80,12 +69,10 @@ class App extends React.Component {
       })
       console.log("done reg")
       const parsedResponse = await registerResponse.json()
-      localStorage.setItem("user", JSON.stringify(parsedResponse.data))
-
       console.log(parsedResponse, 'this is my data')
 
       this.setState({
-        ...parsedResponse.createdUser,
+        ...parsedResponse.data,
         loading: false
       })
 
@@ -96,16 +83,43 @@ class App extends React.Component {
     }
   }
 
+  update = async(data) =>{
+    try{
+        const user = await fetch(`http://localhost:3000/user/${this.state._id}`,{
+            method: "PUT",
+            credentials: "include",
+            body: JSON.stringify(data),
+            headers:{
+                "Content-Type": "application/json"
+            }
+        })
+
+        const parsedUser = await user.json()
+        console.log(parsedUser, 'parsed user')
+
+        this.setState({
+          ...parsedUser.data,
+          loading: false
+        })
+
+        return parsedUser
+
+    }catch(err){
+        console.log(err)
+    }
+}
+
+
 
   render(){
-    const user = JSON.parse(localStorage.getItem("user"))
     return (
       <div className="App">
         <main>
           <Switch>
             <Route exact path="/" render={(props) => <Login {...props} logIn={this.login}/>}/>
             <Route exact path="/register" render={(props) => <Register {...props} register={this.register} /> } />
-            <Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state}/>} userInfo={user}/>
+            <Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state}/>} />
+            <Route exact path="/editUser" render={(props) => <EditUser {...props} update={this.update}/>} />
             <Route component={My404}/>
           </Switch>
         </main>
@@ -115,3 +129,6 @@ class App extends React.Component {
 }
 
 export default withRouter(App);
+
+
+// {islogged ? kghjlljhkjgh : login}
