@@ -5,7 +5,8 @@ import Register from './Register'
 import Profile from './Profile'
 import Login from './Login'
 import EditUser from './EditUser'
-import { Route, Switch, withRouter } from 'react-router-dom'
+import NavBar from './NavBar'
+import { Route, Switch, withRouter, Redirect, NavLink } from 'react-router-dom'
 
 const My404 = () =>{
   return (
@@ -18,12 +19,9 @@ const My404 = () =>{
 
 class App extends React.Component {
   state = {
-    username: '',
-    email: '',
+    user: null,
     loading: true,
-    password:'',
-    isLogged: false,
-    _id: ''
+    isLogged: false
   }
 
   login = async (loginInfo) =>{
@@ -41,7 +39,7 @@ class App extends React.Component {
       console.log(parsedResponse, 'this is my logindata')
       this.setState(() => {
         return {
-          ...parsedResponse.foundUser,
+          user: parsedResponse.foundUser,
           loading: false
         }
       })
@@ -72,7 +70,7 @@ class App extends React.Component {
       console.log(parsedResponse, 'this is my data')
 
       this.setState({
-        ...parsedResponse.data,
+        user: parsedResponse.data,
         loading: false
       })
 
@@ -85,7 +83,7 @@ class App extends React.Component {
 
   update = async(data) =>{
     try{
-        const user = await fetch(`http://localhost:3000/user/${this.state._id}`,{
+        const user = await fetch(`http://localhost:3000/user/${this.state.user._id}`,{
             method: "PUT",
             credentials: "include",
             body: JSON.stringify(data),
@@ -98,7 +96,7 @@ class App extends React.Component {
         console.log(parsedUser, 'parsed user')
 
         this.setState({
-          ...parsedUser.data,
+          user: {...this.state.user, ...parsedUser.data},
           loading: false
         })
 
@@ -109,26 +107,57 @@ class App extends React.Component {
     }
 }
 
+delete = async () =>{
+  try{
+      const deletedUser = fetch(`http://localhost:3000/user/${this.state.user._id}`, {
+        method: "DELETE"
+      })
 
+      const parsedDelete = await deletedUser.json()
+      console.log(parsedDelete, 'deleteddddd')
+
+      this.setState({
+        loading:false
+      })
+          
+
+      this.props.history.push(`/`)
+
+  }catch(err){
+      console.log(err)
+  }
+
+}
+
+
+  updateUser = (newUser) => {
+    console.log(newUser)
+    this.setState({
+      user: newUser
+    })
+  }
 
   render(){
     return (
       <div className="App">
+        <NavBar user={this.state.user} />
         <main>
           <Switch>
             <Route exact path="/" render={(props) => <Login {...props} logIn={this.login}/>}/>
             <Route exact path="/register" render={(props) => <Register {...props} register={this.register} /> } />
-            <Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state}/>} />
-            <Route exact path="/editUser" render={(props) => <EditUser {...props} update={this.update}/>} />
+            
+            {
+              this.state.user
+                ? [<Route exact path="/editUser/:id" render={(props) => <EditUser updateUser={this.updateUser}{...props} update={this.update} delete={this.deleteUser}/>} />,<Route exact path="/profile" render={(props) => <Profile {...props} userInfo={this.state.user}/>} />]
+                : <Redirect to='/'/>
+            }
+            
             <Route component={My404}/>
           </Switch>
-        </main>
+        </main>     
       </div>
     )
   }
 }
 
 export default withRouter(App);
-
-
-// {islogged ? kghjlljhkjgh : login}

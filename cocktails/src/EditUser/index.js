@@ -1,13 +1,27 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
 import { Button, Form, Grid, Segment, GridColumn, Input } from 'semantic-ui-react'
 
 
 class EditUser extends React.Component{
     state={
-        username:'',
-        name: '',
-        email: '',
-        password:'',
+        user: {}
+    }
+
+    componentDidMount() {
+        this.getUser()
+    }
+
+    getUser = async () => {
+        const id = this.props.match.params.id
+        try {
+            const user = await (await fetch (`http://localhost:3000/user/${id}`)).json()
+            this.setState({
+                ...user.data
+            })
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     handleChange = (e) => {
@@ -23,6 +37,17 @@ class EditUser extends React.Component{
 
     }
 
+    delete = async() =>{
+        const deleteResponse = await fetch(`http://localhost:3000/user/${this.state._id}`,{
+            method:"DELETE"
+        })
+        const parsedResponse = await deleteResponse.json()
+        console.log(parsedResponse)
+        if (parsedResponse.status.message === true){
+            this.props.updateUser(null)
+            this.props.history.push('/')
+        }
+    }
 
    
     render(){
@@ -34,9 +59,9 @@ class EditUser extends React.Component{
                     <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' type='text' name='username' onChange={this.handleChange} value={this.state.username}/>
                     <Form.Input fluid icon='user' iconPosition='left' placeholder='Name' type='text' name='name' onChange={this.handleChange} value={this.state.name}/>                        
                     <Form.Input fluid icon='mail' iconPosition='left' placeholder='Email' type='text' name='email' onChange={this.handleChange} value={this.state.email}/>                        
-                    <Form.Input fluid icon='key' iconPosition='left' placeholder='Password' type='text' name='password' onChange={this.handleChange} value={this.state.password}/>
+                    <Form.Input fluid icon='key' iconPosition='left' placeholder='Password' type='text' name='password' onChange={this.handleChange}/>
                     <Button type="submit">Edit</Button>
-                    <Button type="button" onClick={}>Delete</Button>
+                    <Button type="button" onClick={this.delete}>Delete</Button>
                     </Segment> 
                 </Form>
               </GridColumn>
@@ -46,4 +71,4 @@ class EditUser extends React.Component{
     
 }
 
-export default EditUser
+export default withRouter(EditUser)

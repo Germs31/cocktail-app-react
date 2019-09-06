@@ -1,4 +1,6 @@
 import React from 'react'
+import { Button, Form, Grid, Segment, GridColumn, Input } from 'semantic-ui-react'
+
 
 class Register extends React.Component{
     state={
@@ -17,26 +19,36 @@ class Register extends React.Component{
     handleSubmit = (e) => {
         e.preventDefault()
         const registerCall = this.props.register(this.state);
-        registerCall.then((data) => {this.props.history.push('/profile')})
+        registerCall.then((data) => {
+            console.log(data)
+            this.props.history.push(`/profile`)
+        })
     }
 
 
     render(){
 
         return(
-            <form onSubmit={this.handleSubmit}>
-                <label>username:</label>
-                <input name="username" type="text" onChange={this.handleChange}/>
-                <label>name:</label>
-                <input name="name" type="text" onChange={this.handleChange}/>
-                <label>email:</label>
-                <input name="email" type="text" onChange={this.handleChange}/>
-                <label>password:</label>
-                <input name="password" type="text" onChange={this.handleChange}/>
-                <button type="submit">Submit</button>
-            </form>
+            <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+              <GridColumn style={{ maxWidth: 450 }}>
+                <Form onSubmit={this.handleSubmit}>
+                    <Segment>
+                    <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' type='text' name='username' onChange={this.handleChange} value={this.state.username}/>
+                    <Form.Input fluid icon='user' iconPosition='left' placeholder='Name' type='text' name='name' onChange={this.handleChange} value={this.state.name}/>                        
+                    <Form.Input fluid icon='mail' iconPosition='left' placeholder='Email' type='text' name='email' onChange={this.handleChange} value={this.state.email}/>                        
+                    <Form.Input fluid icon='key' iconPosition='left' placeholder='Password' type='password' name='password' onChange={this.handleChange}/>
+                    <Button type="submit">Register</Button>
+                    </Segment> 
+                </Form>
+              </GridColumn>
+            </Grid>
         )
     }
 }
 
 export default Register 
+
+
+
+
+

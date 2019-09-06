@@ -1,14 +1,9 @@
 import React from 'react'
+import ShowPage from '../ShowPage'
 import {Link} from 'react-router-dom'
 
 
 class Profile extends React.Component{
-    state={
-        id:'',
-        username: '',
-        email: '',
-        isLogged: ''
-    }
 
     logOut = async () =>{
         try{
@@ -26,6 +21,8 @@ class Profile extends React.Component{
         }
 
     }
+
+
     
 
     
@@ -34,7 +31,10 @@ class Profile extends React.Component{
             <div>
                 <h3>Welcome, {this.props.userInfo.username}</h3>
                 <button onClick={()=>this.logOut()}>Log Out</button>
-                <Link to = '/editUser'>Edit</Link>  
+                <Link to = {`/editUser/${this.props.userInfo._id}`}>Edit</Link> 
+
+                <ShowPage/>
+
             </div>
         )
     }
