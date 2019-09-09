@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { Button, Form, Grid, Segment, GridColumn, Input } from 'semantic-ui-react'
+import { Button, Form, Grid, Segment, GridColumn, Header } from 'semantic-ui-react'
 
 
 class EditUser extends React.Component{
@@ -54,6 +54,7 @@ class EditUser extends React.Component{
         return(
             <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
               <GridColumn style={{ maxWidth: 450 }}>
+                <Header as="h1">Update Information</Header>
                 <Form onSubmit={this.handleEditSubmit}>
                     <Segment>
                     <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' type='text' name='username' onChange={this.handleChange} value={this.state.username}/>
