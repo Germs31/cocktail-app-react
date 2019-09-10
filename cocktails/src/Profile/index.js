@@ -7,7 +7,7 @@ class Profile extends React.Component{
 
     logOut = async () =>{
         try{
-            fetch('http://localhost:3000/auth/logout')
+            fetch(`${process.env.REACT_APP_BACKEND_URL}auth/logout`)
                 .then(res =>{
                     this.setState({
                         isLogged: false

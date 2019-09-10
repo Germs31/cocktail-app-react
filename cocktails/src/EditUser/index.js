@@ -15,7 +15,7 @@ class EditUser extends React.Component{
     getUser = async () => {
         const id = this.props.match.params.id
         try {
-            const user = await (await fetch (`http://localhost:3000/user/${id}`)).json()
+            const user = await (await fetch (`${process.env.REACT_APP_BACKEND_URL}user/${id}`)).json()
             this.setState({
                 ...user.data
             })
@@ -38,7 +38,7 @@ class EditUser extends React.Component{
     }
 
     delete = async() =>{
-        const deleteResponse = await fetch(`http://localhost:3000/user/${this.state._id}`,{
+        const deleteResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}user/${this.state._id}`,{
             method:"DELETE"
         })
         const parsedResponse = await deleteResponse.json()

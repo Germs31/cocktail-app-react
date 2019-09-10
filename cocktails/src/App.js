@@ -27,7 +27,7 @@ class App extends React.Component {
 
   login = async (loginInfo) =>{
     try {
-      const loginResponse = await fetch (`http://localhost:3000/auth/login`, {
+      const loginResponse = await fetch (`${process.env.REACT_APP_BACKEND_URL}auth/login`, {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(loginInfo),
@@ -58,7 +58,7 @@ class App extends React.Component {
   register = async (data) =>{
     console.log(data)
     try{
-      const registerResponse = await fetch(`http://localhost:3000/auth/register`,{
+      const registerResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}auth/register`,{
         method: 'POST',
         credential: 'include',
         body: JSON.stringify(data),
@@ -84,7 +84,7 @@ class App extends React.Component {
 
   update = async(data) =>{
     try{
-        const user = await fetch(`http://localhost:3000/user/${this.state.user._id}`,{
+        const user = await fetch(`${process.env.REACT_APP_BACKEND_URL}user/${this.state.user._id}`,{
             method: "PUT",
             credentials: "include",
             body: JSON.stringify(data),
@@ -110,7 +110,7 @@ class App extends React.Component {
 
 delete = async () =>{
   try{
-      const deletedUser = fetch(`http://localhost:3000/user/${this.state.user._id}`, {
+      const deletedUser = fetch(`${process.env.REACT_APP_BACKEND_URL}user/${this.state.user._id}`, {
         method: "DELETE"
       })
 
@@ -180,7 +180,7 @@ deleteFav = index =>{
           mesurement14: drinkData.drinkR[0].strMeasure14,
           mesurement15: drinkData.drinkR[0].strMeasure15,
       }
-      const addedDrank = await fetch (`http://localhost:3000/user/${this.state.user._id}`, {
+      const addedDrank = await fetch (`${process.env.REACT_APP_BACKEND_URL}user/${this.state.user._id}`, {
           method: 'POST',
           credentials: 'include',
           body: JSON.stringify(objData),

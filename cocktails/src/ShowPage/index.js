@@ -13,7 +13,7 @@ class ShowPage extends React.Component{
 
     getRandomDrink = async () =>{
         try{
-            const data = await fetch(`http://localhost:3000/cocktail/randomDrink`, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}cocktail/randomDrink`, {
                 method: "GET",
                 credentials: 'include',
                 headers: {
@@ -35,7 +35,7 @@ class ShowPage extends React.Component{
     addToFavs = async () =>{
         this.props.addToFavs(this.state)
         try{
-            const data = await fetch(`http://localhost:3000/cocktail/randomDrink`, {
+            const data = await fetch(`${process.env.REACT_APP_BACKEND_URL}cocktail/randomDrink`, {
                 method: "GET",
                 credentials: 'include',
                 headers: {
@@ -100,8 +100,8 @@ class ShowPage extends React.Component{
                                                 <h1>{d.strDrink}</h1>
                                                 <Image circular centered size='medium' src={d.strDrinkThumb}/>
                                                 <h3>{d.strInstructions}</h3>
-                                                <Button type="submit" onClick={this.addToFavs}>Add To Favs</Button>
-                                                <Button onClick={() =>this.getRandomDrink()}>Random</Button>
+                                                <Button color="teal" type="submit" onClick={this.addToFavs}>Add To Favs</Button>
+                                                <Button color="teal" onClick={() =>this.getRandomDrink()}>Random</Button>
                                             </div>
                                         )
                                     })
